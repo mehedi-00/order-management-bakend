@@ -1,5 +1,16 @@
 import { Schema, model } from 'mongoose'
-import { Iuser } from './user/user.interface'
+import { IfullName, Iuser } from './user/user.interface'
+
+const fullnameSchema = new Schema<IfullName>({
+  firstName: {
+    type: String,
+    required: [true, 'firstName is required'],
+  },
+  lastName: {
+    type: String,
+    required: [true, 'lastName is required'],
+  },
+})
 
 const userSchema = new Schema<Iuser>({
   userId: {
@@ -17,14 +28,7 @@ const userSchema = new Schema<Iuser>({
     required: [true, 'password is required'],
   },
   fullName: {
-    firstName: {
-      type: String,
-      required: [true, 'firstName is required'],
-    },
-    lastName: {
-      type: String,
-      required: [true, 'lastName is required'],
-    },
+    type: fullnameSchema,
     required: [true, 'fullName is required'],
   },
   age: {

@@ -1,4 +1,4 @@
-type IfullName = {
+export type IfullName = {
   firstName: string
   lastName: string
 }

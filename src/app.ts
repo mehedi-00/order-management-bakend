@@ -1,13 +1,17 @@
-import express, { Application } from "express";
-import cors from "cors";
-const app: Application = express();
+import express, { Application } from 'express'
+import cors from 'cors'
+import { userRouter } from './app/modules/user/user.route'
+const app: Application = express()
 
 // parser
-app.use(express.json());
-app.use(cors());
+app.use(express.json())
+app.use(cors())
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+//router middleware here
+app.use('/api/user', userRouter)
 
-export default app;
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+export default app
