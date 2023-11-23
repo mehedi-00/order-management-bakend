@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { IfullName, Iuser } from './user/user.interface'
+import { IfullName, Iorders, Iuser } from './user/user.interface'
 
 const fullnameSchema = new Schema<IfullName>({
   firstName: {
@@ -11,7 +11,20 @@ const fullnameSchema = new Schema<IfullName>({
     required: [true, 'lastName is required'],
   },
 })
-
+const ordersSchema = new Schema<Iorders>({
+  productName: {
+    type: String,
+    required: [true, 'productName is required'],
+  },
+  price: {
+    type: Number,
+    required: [true, 'price is required'],
+  },
+  quantity: {
+    type: Number,
+    required: [true, 'quantity is required'],
+  },
+})
 const userSchema = new Schema<Iuser>({
   userId: {
     type: Number,
@@ -49,13 +62,9 @@ const userSchema = new Schema<Iuser>({
     city: String,
     contry: String,
   },
-  orders: [
-    {
-      productName: String,
-      price: Number,
-      quantity: Number,
-    },
-  ],
+  orders: {
+    type: ordersSchema,
+  },
 })
 
 export const User = model<Iuser>('User', userSchema)

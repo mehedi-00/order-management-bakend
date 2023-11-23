@@ -5,7 +5,7 @@ export type IfullName = {
 type Iaddress = {
   street: string
   city: string
-  contry: string
+  country: string
 }
 export type Iorders = {
   productName: string

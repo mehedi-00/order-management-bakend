@@ -3,7 +3,7 @@ import { userController } from './user.controller'
 
 const router = express.Router()
 
-// Create a new user
+// Create a  user
 
 router.post('/', userController.createUser)
 
