@@ -1,5 +1,5 @@
 import { User } from '../user.model'
-import { Iuser } from './user.interface'
+import { Iorders, Iuser } from './user.interface'
 
 //create user
 const createUserIntoDb = async (userData: Iuser) => {
@@ -33,9 +33,45 @@ const updateSingleUserIntoDb = async (
   return result
 }
 
+// delete user
+const deleteUserIntoDb = async (userId: number) => {
+  const result = await User.deleteOne({ userId })
+  return result
+}
+
+// add product
+const addProductIntoDb = async (userId: number, productData: Iorders) => {
+  const existUserAndOrders = await User.findOne({
+    $and: [{ userId }, { orders: { $exists: true } }],
+  })
+  if (existUserAndOrders) {
+    const result = await User.updateOne(
+      { userId },
+      {
+        $push: {
+          orders: productData,
+        },
+      },
+    )
+    return result
+  } else {
+    const result = await User.updateOne(
+      { userId },
+      {
+        $addToSet: {
+          orders: productData,
+        },
+      },
+    )
+    return result
+  }
+}
+
 export const userService = {
   createUserIntoDb,
   getAllUsersIntoDb,
   getSingleUserIntoDb,
   updateSingleUserIntoDb,
+  deleteUserIntoDb,
+  addProductIntoDb,
 }

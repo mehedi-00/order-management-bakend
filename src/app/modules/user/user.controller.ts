@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { userService } from './user.service'
 import { userValidationSchema } from './user.validation'
 import { User } from '../user.model'
+import { Iorders } from './user.interface'
 
 // create user
 const createUser = async (req: Request, res: Response) => {
@@ -101,9 +102,70 @@ const updateSingleUser = async (req: Request, res: Response) => {
   }
 }
 
+//delete user
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const userId: any = req.params.userId
+    if (await User.isExistUser(userId)) {
+      const result = await userService.deleteUserIntoDb(userId)
+      res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: result,
+      })
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User Not Found',
+        error: {
+          code: 404,
+          description: 'User not found',
+        },
+      })
+    }
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+    })
+  }
+}
+
+// add product  in user
+const addProduct = async (req: Request, res: Response) => {
+  try {
+    const userId: any = req.params.userId
+    const productData: Iorders = req.body
+    if (await User.isExistUser(userId)) {
+      const result = await userService.addProductIntoDb(userId, productData)
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: result,
+      })
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User Not Found',
+        error: {
+          code: 404,
+          description: 'User not found',
+        },
+      })
+    }
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+    })
+  }
+}
+
 export const userController = {
   createUser,
   getUsers,
   getSingleUser,
   updateSingleUser,
+  deleteUser,
+  addProduct,
 }
