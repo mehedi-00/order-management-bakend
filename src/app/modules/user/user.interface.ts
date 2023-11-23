@@ -1,3 +1,5 @@
+import { Schema, Model } from 'mongoose'
+
 export type IfullName = {
   firstName: string
   lastName: string
@@ -24,4 +26,8 @@ export type Iuser = {
   hobbies: string[]
   address: Iaddress
   orders?: Iorders[]
+}
+
+export interface IUserModel extends Model<Iuser> {
+  isExistUser(userId: number): Promise<Iuser | null>
 }
