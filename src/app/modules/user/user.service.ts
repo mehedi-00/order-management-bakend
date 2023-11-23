@@ -21,8 +21,21 @@ const getSingleUserIntoDb = async (userId: number) => {
   return result
 }
 
+// update single user information
+const updateSingleUserIntoDb = async (
+  userId: number,
+  updatedUserData: Iuser,
+) => {
+  const result = await User.updateOne({ userId }, updatedUserData, {
+    new: true,
+    runValidators: true,
+  })
+  return result
+}
+
 export const userService = {
   createUserIntoDb,
   getAllUsersIntoDb,
   getSingleUserIntoDb,
+  updateSingleUserIntoDb,
 }
