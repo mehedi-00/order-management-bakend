@@ -39,8 +39,8 @@ const deleteUserIntoDb = async (userId: number) => {
   return result
 }
 
-// add product
-const addProductIntoDb = async (userId: number, productData: Iorders) => {
+// add order
+const addOrderIntoDb = async (userId: number, productData: Iorders) => {
   const existUserAndOrders = await User.findOne({
     $and: [{ userId }, { orders: { $exists: true } }],
   })
@@ -67,11 +67,27 @@ const addProductIntoDb = async (userId: number, productData: Iorders) => {
   }
 }
 
+// get all orders by a specific user
+
+const getAllOrdersByUserIntoDb = async (userId: number) => {
+  const result = await User.findOne(
+    {
+      $and: [
+        { userId },
+        { $and: [{ orders: { $exists: true } }, { orders: { $ne: [] } }] },
+      ],
+    },
+    { _id: 0, orders: 1 },
+  )
+  return result
+}
+
 export const userService = {
   createUserIntoDb,
   getAllUsersIntoDb,
   getSingleUserIntoDb,
   updateSingleUserIntoDb,
   deleteUserIntoDb,
-  addProductIntoDb,
+  addOrderIntoDb,
+  getAllOrdersByUserIntoDb,
 }

@@ -137,10 +137,39 @@ const addProduct = async (req: Request, res: Response) => {
     const userId: any = req.params.userId
     const productData: Iorders = req.body
     if (await User.isExistUser(userId)) {
-      const result = await userService.addProductIntoDb(userId, productData)
+      const result = await userService.addOrderIntoDb(userId, productData)
       res.status(200).json({
         success: true,
         message: 'Order created successfully!',
+        data: result,
+      })
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User Not Found',
+        error: {
+          code: 404,
+          description: 'User not found',
+        },
+      })
+    }
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+    })
+  }
+}
+// get all orders by a specific user
+
+const getAllOrdersByUser = async (req: Request, res: Response) => {
+  try {
+    const userId: any = req.params.userId
+    if (await User.isExistUser(userId)) {
+      const result = await userService.getAllOrdersByUserIntoDb(userId)
+      res.status(200).json({
+        success: true,
+        message: 'Order fetched successfully!',
         data: result,
       })
     } else {
@@ -168,4 +197,5 @@ export const userController = {
   updateSingleUser,
   deleteUser,
   addProduct,
+  getAllOrdersByUser,
 }
