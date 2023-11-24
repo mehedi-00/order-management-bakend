@@ -8,7 +8,7 @@ app.use(express.json())
 app.use(cors())
 
 //router middleware here
-app.use('/api/user', userRouter)
+app.use('/api/users', userRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

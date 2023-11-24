@@ -45,6 +45,7 @@ const userSchema = new Schema<Iuser, IUserModel>({
   fullName: {
     type: fullnameSchema,
     required: [true, 'fullName is required'],
+    _id: false,
   },
   age: {
     type: Number,
@@ -62,9 +63,12 @@ const userSchema = new Schema<Iuser, IUserModel>({
   address: {
     street: String,
     city: String,
-    contry: String,
+    country: String,
   },
-  orders: [ordersSchema],
+  orders: {
+    type: [ordersSchema],
+    _id: false,
+  },
 })
 
 userSchema.pre('save', async function (next) {
@@ -75,8 +79,20 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
+userSchema.pre('findOneAndUpdate', async function (next) {
+  const updateData = this.getUpdate() as any
+  if (updateData.password) {
+    updateData.password = await bcrypt.hash(
+      updateData.password,
+      Number(config.bcrypt_salt_rounds),
+    )
+  }
+  next()
+})
+
 userSchema.post('save', function (doc, next) {
   doc.set('password', undefined)
+  doc.set('orders', undefined)
   next()
 })
 
@@ -103,7 +119,9 @@ userSchema.statics.totalOrderPrice = async function (userid: number) {
       totalPrice: result[0].totalPrice,
     }
   } else {
-    return 0
+    return {
+      totalPrice: 0,
+    }
   }
 }
 

@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { User } from '../user.model'
 import { Iorders, Iuser } from './user.interface'
 
 //create user
 const createUserIntoDb = async (userData: Iuser) => {
   const result = await User.create(userData)
-  const { password: string, ...userWithoutPassword } = result.toObject()
-  return userWithoutPassword
+
+  // eslint-disable-next-line no-unused-vars
+  const { _id, ...withoutId } = result.toObject()
+
+  return withoutId
 }
 // get all users
 const getAllUsersIntoDb = async () => {
@@ -18,7 +22,10 @@ const getAllUsersIntoDb = async () => {
 
 // get single user by userId
 const getSingleUserIntoDb = async (userId: number) => {
-  const result = await User.findOne({ userId }, { password: 0, _id: 0 })
+  const result = await User.findOne(
+    { userId },
+    { password: 0, _id: 0, orders: 0 },
+  )
   return result
 }
 
@@ -27,9 +34,9 @@ const updateSingleUserIntoDb = async (
   userId: number,
   updatedUserData: Iuser,
 ) => {
-  const result = await User.updateOne({ userId }, updatedUserData, {
+  const result = await User.findOneAndUpdate({ userId }, updatedUserData, {
     new: true,
-    runValidators: true,
+    projection: { _id: 0, password: 0, orders: 0 },
   })
   return result
 }
