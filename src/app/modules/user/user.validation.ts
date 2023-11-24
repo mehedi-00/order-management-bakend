@@ -10,7 +10,7 @@ export const userValidationSchema = z.object({
   username: z.string(),
   password: z.string(),
   fullName: fullNameSchema,
-  age: z.number(),
+  age: z.number().positive(),
   email: z.string().email({ message: 'email is required' }),
   isActive: z.boolean(),
   hobbies: z.array(z.string()),

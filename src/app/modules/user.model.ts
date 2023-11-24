@@ -13,7 +13,7 @@ const fullnameSchema = new Schema<IfullName>({
     required: [true, 'lastName is required'],
   },
 })
-const ordersSchema = new Schema<Iorders, IUserModel>({
+const ordersSchema = new Schema<Iorders>({
   productName: {
     type: String,
     required: [true, 'productName is required'],
@@ -27,7 +27,7 @@ const ordersSchema = new Schema<Iorders, IUserModel>({
     required: [true, 'quantity is required'],
   },
 })
-const userSchema = new Schema<Iuser>({
+const userSchema = new Schema<Iuser, IUserModel>({
   userId: {
     type: Number,
     unique: true,
@@ -76,13 +76,35 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.post('save', function (doc, next) {
-  doc.password = ''
+  doc.set('password', undefined)
   next()
 })
 
 userSchema.statics.isExistUser = async function (userId: number) {
   const isExistUser = await User.findOne({ userId })
   return isExistUser
+}
+userSchema.statics.totalOrderPrice = async function (userid: number) {
+  const result = await this.aggregate([
+    { $match: { userId: { $eq: Number(userid) } } },
+    { $unwind: '$orders' },
+    {
+      $group: {
+        _id: null,
+        totalPrice: {
+          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+        },
+      },
+    },
+    { $project: { _id: 0 } },
+  ]).exec()
+  if (result.length > 0) {
+    return {
+      totalPrice: result[0].totalPrice,
+    }
+  } else {
+    return 0
+  }
 }
 
 export const User = model<Iuser, IUserModel>('User', userSchema)

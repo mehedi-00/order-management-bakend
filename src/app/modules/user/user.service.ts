@@ -4,7 +4,8 @@ import { Iorders, Iuser } from './user.interface'
 //create user
 const createUserIntoDb = async (userData: Iuser) => {
   const result = await User.create(userData)
-  return result
+  const { password: string, ...userWithoutPassword } = result.toObject()
+  return userWithoutPassword
 }
 // get all users
 const getAllUsersIntoDb = async () => {
@@ -82,6 +83,13 @@ const getAllOrdersByUserIntoDb = async (userId: number) => {
   return result
 }
 
+// get total orders price by a specific user
+
+const getTotalOrdersByUserIntoDb = async (userId: number) => {
+  const result = await User.totalOrderPrice(userId)
+  return result
+}
+
 export const userService = {
   createUserIntoDb,
   getAllUsersIntoDb,
@@ -90,4 +98,5 @@ export const userService = {
   deleteUserIntoDb,
   addOrderIntoDb,
   getAllOrdersByUserIntoDb,
+  getTotalOrdersByUserIntoDb,
 }

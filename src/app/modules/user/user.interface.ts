@@ -30,4 +30,5 @@ export type Iuser = {
 
 export interface IUserModel extends Model<Iuser> {
   isExistUser(userId: number): Promise<Iuser | null>
+  totalOrderPrice(userId: number): Promise<number>
 }
