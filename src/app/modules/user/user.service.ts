@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from '../user.model'
 import { Iorders, Iuser } from './user.interface'
+import { User } from './user.model'
 
 //create user
 const createUserIntoDb = async (userData: Iuser) => {

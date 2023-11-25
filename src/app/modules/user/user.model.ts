@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose'
 import bcrypt from 'bcryptjs'
-import { IUserModel, IfullName, Iorders, Iuser } from './user/user.interface'
-import config from '../config'
+import { Schema, model } from 'mongoose'
+import { IUserModel, IfullName, Iorders, Iuser } from './user.interface'
+import config from '../../config'
 
 const fullnameSchema = new Schema<IfullName>({
   firstName: {

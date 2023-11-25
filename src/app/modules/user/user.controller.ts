@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
+import { Iorders } from './user.interface'
 import { userService } from './user.service'
 import { userValidationSchema } from './user.validation'
-import { User } from '../user.model'
-import { Iorders } from './user.interface'
+import { User } from './user.model'
 
 // create user
 const createUser = async (req: Request, res: Response) => {
