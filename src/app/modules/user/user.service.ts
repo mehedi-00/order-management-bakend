@@ -92,7 +92,7 @@ const getAllOrdersByUserIntoDb = async (userId: number) => {
 
 // get total orders price by a specific user
 
-const getTotalOrdersByUserIntoDb = async (userId: number) => {
+const getCalculateTotalPriceIntoDb = async (userId: number) => {
   const result = await User.totalOrderPrice(userId)
   return result
 }
@@ -105,5 +105,5 @@ export const userService = {
   deleteUserIntoDb,
   addOrderIntoDb,
   getAllOrdersByUserIntoDb,
-  getTotalOrdersByUserIntoDb,
+  getCalculateTotalPriceIntoDb,
 }

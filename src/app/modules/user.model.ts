@@ -90,16 +90,20 @@ userSchema.pre('findOneAndUpdate', async function (next) {
   next()
 })
 
+// creating this hook password and orders hide the response
 userSchema.post('save', function (doc, next) {
   doc.set('password', undefined)
   doc.set('orders', undefined)
   next()
 })
 
+// using this method  cheak exist user
 userSchema.statics.isExistUser = async function (userId: number) {
   const isExistUser = await User.findOne({ userId })
   return isExistUser
 }
+
+// using this method  getcalculate total order price
 userSchema.statics.totalOrderPrice = async function (userid: number) {
   const result = await this.aggregate([
     { $match: { userId: { $eq: Number(userid) } } },

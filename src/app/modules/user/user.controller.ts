@@ -73,7 +73,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 // single user update
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
-    const userId: any = req.params.userId
+    const userId: number = Number(req.params.userId)
     const updatedUserData = req.body
     if (await User.isExistUser(userId)) {
       const result = await userService.updateSingleUserIntoDb(
@@ -135,10 +135,10 @@ const deleteUser = async (req: Request, res: Response) => {
 // add product  in user
 const addProduct = async (req: Request, res: Response) => {
   try {
-    const userId: any = req.params.userId
+    const userId: number = Number(req.params.userId)
     const productData: Iorders = req.body
     if (await User.isExistUser(userId)) {
-      const result = await userService.addOrderIntoDb(userId, productData)
+      await userService.addOrderIntoDb(userId, productData)
       res.status(200).json({
         success: true,
         message: 'Order created successfully!',
@@ -192,14 +192,14 @@ const getAllOrdersByUser = async (req: Request, res: Response) => {
 }
 
 // get total orders price by a specific user
-const getTotalOrdersPrice = async (req: Request, res: Response) => {
+const calculateTotalPrice = async (req: Request, res: Response) => {
   try {
-    const userId: any = req.params.userId
+    const userId: number = Number(req.params.userId)
     if (await User.isExistUser(userId)) {
-      const result = await userService.getTotalOrdersByUserIntoDb(userId)
+      const result = await userService.getCalculateTotalPriceIntoDb(userId)
       res.status(200).json({
         success: true,
-        message: 'Order fetched successfully!',
+        message: 'Total price calculated successfully!',
         data: result,
       })
     } else {
@@ -228,5 +228,5 @@ export const userController = {
   deleteUser,
   addProduct,
   getAllOrdersByUser,
-  getTotalOrdersPrice,
+  calculateTotalPrice,
 }
